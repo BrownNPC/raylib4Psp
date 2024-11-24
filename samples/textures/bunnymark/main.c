@@ -51,77 +51,53 @@ typedef struct Bunny {
 
 void updateController()
 {
-    sceCtrlReadBufferPositive(&pad, 1);
+    // PSP control input mapping to Raylib gamepad buttons
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))  {
+xflag=1;
+    DrawText("Cross pressed \n",0,200,20,RED)  ;
+    }
+    
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) DrawText("Circle pressed \n",0,200,20,RED);
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT)) DrawText("Square pressed \n",0,200,20,RED);
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_UP)) DrawText("Triangle pressed \n",0,200,20,RED);
 
-    if (pad.Buttons != 0)
-    {
-        if (pad.Buttons & PSP_CTRL_SQUARE)
-        {
-            TraceLog(LOG_INFO,"Square pressed \n");
-        }
-        
-        if (pad.Buttons & PSP_CTRL_TRIANGLE)
-        {
-            TraceLog(LOG_INFO,"Triangle pressed \n");
-        } 
-        
-        if (pad.Buttons & PSP_CTRL_CIRCLE)
-        {
-            TraceLog(LOG_INFO,"Cicle pressed \n");
-        } 
-        
-        if (pad.Buttons & PSP_CTRL_CROSS)
-        {
-            TraceLog(LOG_INFO,"Cross pressed \n");
-            xflag = 1;
-        } 
-
-        if (pad.Buttons & PSP_CTRL_UP)
-        {
-            TraceLog(LOG_INFO,"Up pressed \n");
-            y=y-6;
-        } 
-        
-        if (pad.Buttons & PSP_CTRL_DOWN)
-        {
-            TraceLog(LOG_INFO,"Down pressed \n");
-            y=y+6;
-        } 
-        
-        if (pad.Buttons & PSP_CTRL_LEFT)
-        {
-            TraceLog(LOG_INFO,"Left pressed \n");
-            x=x-6;
-        } 
-        
-        if (pad.Buttons & PSP_CTRL_RIGHT)
-        {
-            TraceLog(LOG_INFO,"Right pressed \n");
-            x=x+6;
-        }      
-
-        if (pad.Buttons & PSP_CTRL_START)
-        {
-            TraceLog(LOG_INFO,"Start pressed \n");
-            flag=0;
-        }
-        
-        if (pad.Buttons & PSP_CTRL_SELECT)
-        {
-            TraceLog(LOG_INFO,"Select pressed \n");
-        }
-        
-        if (pad.Buttons & PSP_CTRL_LTRIGGER)
-        {
-            TraceLog(LOG_INFO,"L-trigger pressed \n");
-        }
-        
-        if (pad.Buttons & PSP_CTRL_RTRIGGER)
-        {
-            TraceLog(LOG_INFO,"R-trigger pressed \n");
-        }      
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP)) {
+        DrawText("Up pressed \n",0,200,20,RED);
+        y = y - 6;
     }
 
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN)) {
+        DrawText("Down pressed \n",0,200,20,RED);
+        y = y + 6;
+    }
+
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT)) {
+        DrawText("Left pressed \n",0,200,20,RED);
+        x = x - 6;
+    }
+
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) {
+        DrawText("Right pressed \n",0,200,20,RED);
+        x = x + 6;
+    }
+
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)) {
+        DrawText("Start pressed \n",0,200,20,RED);
+        flag = 0;
+    }
+
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_LEFT)) {
+        DrawText("Select pressed \n",0,200,20,RED);
+    }
+
+    // PSP does not have specific LSHIFT/RSHIFT buttons, so use L/R triggers if available
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_TRIGGER_1)) {
+        DrawText("L-trigger pressed \n",0,200,20,RED);
+    }
+
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_1)) {
+        DrawText("R-trigger pressed \n",0,200,20,RED);
+    }
 }
 
 
@@ -144,7 +120,7 @@ int main(void)
 
     Rectangle boxB= { GetScreenWidth()/2.0f, GetScreenHeight()/2.0f, 6, 6 };
     // Load bunny texture
-    Texture2D texBunny = LoadTexture("host0:/textures/bunnymark/wabbit_alpha.png");
+    Texture2D texBunny = LoadTexture("wabbit_alpha.png");
 
     Bunny *bunnies = (Bunny *)malloc(MAX_BUNNIES*sizeof(Bunny));    // Bunnies array
 
@@ -157,6 +133,8 @@ int main(void)
     while (flag)    
     {
         // Update
+    BeginDrawing();
+        ClearBackground(RAYWHITE);
         updateController();
         // Update player-controlled-box (box02)
         boxB.x = x - boxB.width/2;
@@ -197,9 +175,9 @@ int main(void)
 
         // Draw
         //----------------------------------------------------------------------------------
-        BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+
+          
             DrawRectangleRec(boxB, BLUE);
 
             for (int i = 0; i < bunniesCount; i++)
