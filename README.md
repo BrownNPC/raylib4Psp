@@ -2,6 +2,8 @@
 raylib4Psp is a raylib port for PlayStation PSP
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S6TSF2C)
 
+> This fork is different from the version upstream, because the one upstream is using PspGL, while this fork uses SDL2 as a backend
+
 <img align="left" style="width:260px" src="https://github.com/raysan5/raylib/blob/master/logo/raylib_logo_animation.gif" width="288px">
 
 **raylib is a simple and easy-to-use library to enjoy videogames programming.**
